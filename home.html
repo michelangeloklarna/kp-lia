@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://x.klarnacdn.net/kp/lib/v1/api.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Checkout</h1>
+        <form id="checkout-form">
+            <div class="payment-methods">
+                <h2>Select Payment Method</h2>
+                <label>
+                    <input type="radio" name="payment-method" value="card" checked>
+                    Credit Card
+                </label>
+                <label>
+                    <input type="radio" name="payment-method" value="klarna">
+                    Klarna
+                </label>
+            </div>
+
+            <div id="card-payment" class="payment-section">
+                <!-- Add your card payment form fields here -->
+                <input type="text" placeholder="Card Number" required>
+                <input type="text" placeholder="Expiry Date" required>
+                <input type="text" placeholder="CVV" required>
+            </div>
+
+            <div id="klarna-payment" class="payment-section" style="display: none;">
+                <div id="klarna-payments-container"></div>
+            </div>
+
+            <button type="submit" id="place-order-btn">Place Order</button>
+        </form>
+    </div>
+
+    <script src="checkout.js"></script>
+</body>
+</html>
