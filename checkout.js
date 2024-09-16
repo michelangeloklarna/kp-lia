@@ -1,3 +1,18 @@
+// Define the global klarnaAsyncCallback function
+window.klarnaAsyncCallback = function() {
+    console.log('LIA: Klarna SDK loaded');
+    
+    // Initialize Klarna LIA
+    Klarna.Lia.api().init({
+        container: "#klarna-payments-container"
+    }).then(function() {
+        console.log('LIA: Klarna LIA initialized successfully');
+        loadKlarnaPaymentMethods();
+    }).catch(function(error) {
+        console.error('LIA: Failed to initialize Klarna LIA:', error);
+    });
+};
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM fully loaded');
 
@@ -13,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to pre-fill shipping address with a random GB address
     function prefillShippingAddress() {
+        console.log('Prefilling shipping address');
         const gbAddresses = [
             {
                 email: 'john.smith@example.com',
@@ -47,15 +63,29 @@ document.addEventListener('DOMContentLoaded', function() {
         ];
 
         const randomAddress = gbAddresses[Math.floor(Math.random() * gbAddresses.length)];
+        console.log('Selected random address:', randomAddress);
 
-        document.getElementById('shipping-email').value = randomAddress.email;
-        document.getElementById('shipping-given-name').value = randomAddress.given_name;
-        document.getElementById('shipping-family-name').value = randomAddress.family_name;
-        document.getElementById('shipping-phone').value = randomAddress.phone;
-        document.getElementById('shipping-country').value = randomAddress.country;
-        document.getElementById('shipping-street-address').value = randomAddress.street_address;
-        document.getElementById('shipping-postal-code').value = randomAddress.postal_code;
-        document.getElementById('shipping-city').value = randomAddress.city;
+        const idMapping = {
+            email: 'shipping-email',
+            given_name: 'shipping-given-name',
+            family_name: 'shipping-family-name',
+            phone: 'shipping-phone',
+            country: 'shipping-country',
+            street_address: 'shipping-street-address',
+            postal_code: 'shipping-postal-code',
+            city: 'shipping-city'
+        };
+
+        Object.keys(randomAddress).forEach(key => {
+            const inputId = idMapping[key];
+            const inputField = document.getElementById(inputId);
+            if (inputField) {
+                inputField.value = randomAddress[key];
+                console.log(`Set ${inputId} to ${randomAddress[key]}`);
+            } else {
+                console.warn(`Input field for ${inputId} not found`);
+            }
+        });
     }
 
     // Call the function to pre-fill the shipping address
@@ -67,11 +97,24 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('LIA: Card payment selected');
             cardPaymentSection.style.display = 'block';
             klarnaPaymentSection.style.display = 'none';
+            toggleCardFieldsRequired(true);
         } else if (klarnaRadio.checked) {
             console.log('LIA: Klarna payment selected');
             cardPaymentSection.style.display = 'none';
             klarnaPaymentSection.style.display = 'block';
+            toggleCardFieldsRequired(false);
         }
+    }
+
+    function toggleCardFieldsRequired(required) {
+        const cardFields = cardPaymentSection.querySelectorAll('input');
+        cardFields.forEach(field => {
+            if (required) {
+                field.setAttribute('required', '');
+            } else {
+                field.removeAttribute('required');
+            }
+        });
     }
 
     cardRadio.addEventListener('change', togglePaymentSections);
@@ -118,31 +161,108 @@ document.addEventListener('DOMContentLoaded', function() {
         return { shippingAddress, billingAddress };
     }
 
+    function loadKlarnaPaymentMethods() {
+        var orderData = getOrderData();
+        Klarna.Lia.api().load({
+            order: orderData
+        }).then(function(result) {
+            console.log('LIA: Klarna payment methods loaded successfully');
+        }).catch(function(error) {
+            console.error('LIA: Failed to load Klarna payment methods:', error);
+        });
+    }
+
+    function getOrderData() {
+        var { shippingAddress, billingAddress } = getAddressData();
+        return {
+            locale: "en-GB",
+            purchase_country: "GB",
+            purchase_currency: "GBP",
+            order_amount: 38900,
+            merchant_reference1: "11d609c0-0609-4b3b-a472-40175828ebe2",
+            merchant_reference2: "11d609c0-0609-4b3b-a472-40175828ebe2",
+            order_lines: [
+                {
+                    name: "LG 43UR78006LK 2023",
+                    image_url: "https://johnlewis.scene7.com/is/image/JohnLewis/110217231?wid=640&hei=853",
+                    product_url: "https://www.johnlewis.com/lg-43ur78006lk-2023-led-hdr-4k-ultra-hd-smart-tv-43-inch-with-freeview-play-freesat-hd-dark-iron-grey/p110258583",
+                    quantity: 1,
+                    total_amount: 29900,
+                    unit_price: 29900
+                },
+                {
+                    name: "adidas Supernova Stride Men's Sports Trainers",
+                    image_url: "https://johnlewis.scene7.com/is/image/JohnLewis/006884883alt1?$rsp-pdp-port-640$",
+                    product_url: "https://www.johnlewis.com/adidas-supernova-stride-mens-sports-trainers/p111295105",
+                    quantity: 1,
+                    total_amount: 9000,
+                    unit_price: 9000
+                }
+            ],
+            billing_address: {
+                email: billingAddress.email,
+                given_name: billingAddress.given_name,
+                family_name: billingAddress.family_name,
+                phone: billingAddress.phone,
+                country: billingAddress.country,
+                street_address: billingAddress.street_address,
+                postal_code: billingAddress.postal_code,
+                city: billingAddress.city
+            },
+            shipping_address: {
+                email: shippingAddress.email,
+                given_name: shippingAddress.given_name,
+                family_name: shippingAddress.family_name,
+                phone: shippingAddress.phone,
+                country: shippingAddress.country,
+                street_address: shippingAddress.street_address,
+                postal_code: shippingAddress.postal_code,
+                city: shippingAddress.city
+            }
+        };
+    }
+
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         console.log('LIA: Form submitted');
         var selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
         console.log('LIA: Selected payment method:', selectedPaymentMethod);
 
-        var { shippingAddress, billingAddress } = getAddressData();
-        console.log('LIA: Shipping Address:', shippingAddress);
-        console.log('LIA: Billing Address:', billingAddress);
-
         if (selectedPaymentMethod === 'card') {
             console.log('LIA: Processing card payment...');
             // Add your card payment processing logic here
         } else if (selectedPaymentMethod === 'klarna') {
             console.log('LIA: Processing Klarna payment...');
-            console.log('LIA: Calling Klarna.Payments.authorize()');
-            Klarna.Payments.authorize({
-                shipping_address: shippingAddress,
-                billing_address: billingAddress
-                // Add other required parameters here
-            }, function(res) {
-                console.log('LIA: Klarna.Payments.authorize() response:', res);
-                // Handle the Klarna authorization response
+            var orderData = getOrderData();
+            Klarna.Lia.api().authorize(orderData, function(res) {
+                if (res.approved) {
+                    console.log('LIA: Klarna payment authorized successfully', res);
+                    // Handle successful authorization (e.g., redirect to confirmation page)
+                    // You can use res.credit_card to process the payment with your existing credit card system
+                } else {
+                    console.error('LIA: Klarna payment authorization failed:', res.error);
+                    // Handle failed authorization
+                }
             });
         }
+    });
+
+    // Function to update Klarna session
+    function updateKlarnaSession() {
+        var orderData = getOrderData();
+        Klarna.Lia.api().load({
+            order: orderData
+        }).then(function(result) {
+            console.log('LIA: Klarna session updated successfully');
+        }).catch(function(error) {
+            console.error('LIA: Failed to update Klarna session:', error);
+        });
+    }
+
+    // Add event listeners to address fields
+    var addressFields = document.querySelectorAll('.address-section input');
+    addressFields.forEach(function(field) {
+        field.addEventListener('change', updateKlarnaSession);
     });
 
     // Sample order data (replace this with actual data from Klarna.Lia.api().load)
@@ -175,12 +295,10 @@ document.addEventListener('DOMContentLoaded', function() {
             var itemElement = document.createElement('div');
             itemElement.className = 'cart-item';
             itemElement.innerHTML = `
-                <div class="cart-item-image">
-                    <img src="${item.image_url}" alt="${item.name}">
-                </div>
                 <div class="cart-item-details">
                     <div class="cart-item-name">${item.name}</div>
                     <div class="cart-item-price">£${(item.unit_price / 100).toFixed(2)}</div>
+                    <div class="cart-item-quantity">Qty: ${item.quantity}</div>
                 </div>
             `;
             cartItemsContainer.appendChild(itemElement);
@@ -190,27 +308,33 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Populate cart summary
+    var orderData = getOrderData();
     populateCartSummary(orderData);
 
-    // Initialize Klarna Payments
-    if (typeof Klarna !== 'undefined') {
-        console.log('LIA: Initializing Klarna Payments');
-        Klarna.Payments.init({
-            client_token: 'YOUR_CLIENT_TOKEN'
+    sameAsShippingCheckbox.addEventListener('change', function() {
+        billingAddressFields.style.display = this.checked ? 'none' : 'block';
+        
+        // Toggle required attribute for billing fields
+        const billingInputs = billingAddressFields.querySelectorAll('input');
+        billingInputs.forEach(input => {
+            input.required = !this.checked;
         });
+    });
 
-        console.log('LIA: Loading Klarna Payments');
-        Klarna.Payments.load({
-            container: '#klarna-payments-container',
-            payment_method_category: 'pay_later'
-        }, function(result) {
-            if (result.show_form) {
-                console.log('LIA: Klarna Payments form loaded successfully');
-            } else {
-                console.error('LIA: Failed to load Klarna Payments:', result.error);
-            }
-        });
-    } else {
-        console.error('LIA: Klarna script not loaded');
-    }
+    // Add event listeners to shipping address fields to update Klarna session on change
+    const shippingFields = document.querySelectorAll('.address-section input[id^="shipping-"]');
+    shippingFields.forEach(field => {
+        field.addEventListener('change', updateKlarnaSession);
+    });
+
+    // Add this at the end of the DOMContentLoaded event listener
+    console.log('Checking if shipping address was prefilled:');
+    ['email', 'given-name', 'family-name', 'phone', 'country', 'street-address', 'postal-code', 'city'].forEach(key => {
+        const inputField = document.getElementById(`shipping-${key}`);
+        if (inputField) {
+            console.log(`${key}: ${inputField.value}`);
+        } else {
+            console.warn(`Input field for ${key} not found`);
+        }
+    });
 });

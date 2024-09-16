@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://x.klarnacdn.net/kp/lib/v1/api.js"></script>
+    <script
+        src="https://cdn.cs.playground.klarna.com/lia/sdk/lia-sdk_eu.js"
+        async
+></script>
 </head>
 <body>
     <header>
@@ -19,28 +22,28 @@
                     <div class="address-container">
                         <div class="address-section">
                             <h2>Shipping Address</h2>
-                            <input type="email" id="shipping-email" placeholder="Email" required>
-                            <input type="text" id="shipping-given-name" placeholder="First Name" required>
-                            <input type="text" id="shipping-family-name" placeholder="Last Name" required>
-                            <input type="tel" id="shipping-phone" placeholder="Phone" required>
-                            <input type="text" id="shipping-country" placeholder="Country" required>
-                            <input type="text" id="shipping-street-address" placeholder="Street Address" required>
-                            <input type="text" id="shipping-postal-code" placeholder="Postal Code" required>
-                            <input type="text" id="shipping-city" placeholder="City" required>
+                            <input type="email" id="shipping-email" name="shipping-email" placeholder="Email" required>
+                            <input type="text" id="shipping-given-name" name="shipping-given-name" placeholder="First Name" required>
+                            <input type="text" id="shipping-family-name" name="shipping-family-name" placeholder="Last Name" required>
+                            <input type="tel" id="shipping-phone" name="shipping-phone" placeholder="Phone" required>
+                            <input type="text" id="shipping-country" name="shipping-country" placeholder="Country" required>
+                            <input type="text" id="shipping-street-address" name="shipping-street-address" placeholder="Street Address" required>
+                            <input type="text" id="shipping-postal-code" name="shipping-postal-code" placeholder="Postal Code" required>
+                            <input type="text" id="shipping-city" name="shipping-city" placeholder="City" required>
                         </div>
 
                         <div class="address-section">
                             <h2>Billing Address</h2>
                             <label><input type="checkbox" id="same-as-shipping" checked> Same as shipping</label>
-                            <div id="billing-address-fields">
-                                <input type="email" id="billing-email" placeholder="Email" required>
-                                <input type="text" id="billing-given-name" placeholder="First Name" required>
-                                <input type="text" id="billing-family-name" placeholder="Last Name" required>
-                                <input type="tel" id="billing-phone" placeholder="Phone" required>
-                                <input type="text" id="billing-country" placeholder="Country" required>
-                                <input type="text" id="billing-street-address" placeholder="Street Address" required>
-                                <input type="text" id="billing-postal-code" placeholder="Postal Code" required>
-                                <input type="text" id="billing-city" placeholder="City" required>
+                            <div id="billing-address-fields" style="display: none;">
+                                <input type="email" id="billing-email" name="billing-email" placeholder="Email">
+                                <input type="text" id="billing-given-name" name="billing-given-name" placeholder="First Name">
+                                <input type="text" id="billing-family-name" name="billing-family-name" placeholder="Last Name">
+                                <input type="tel" id="billing-phone" name="billing-phone" placeholder="Phone">
+                                <input type="text" id="billing-country" name="billing-country" placeholder="Country">
+                                <input type="text" id="billing-street-address" name="billing-street-address" placeholder="Street Address">
+                                <input type="text" id="billing-postal-code" name="billing-postal-code" placeholder="Postal Code">
+                                <input type="text" id="billing-city" name="billing-city" placeholder="City">
                             </div>
                         </div>
                     </div>
@@ -64,11 +67,11 @@
                     </div>
 
                     <div id="card-payment" class="payment-section">
-                        <input type="text" placeholder="Card Number" required>
-                        <input type="text" placeholder="Name on card" required>
+                        <input type="text" name="card-number" placeholder="Card Number" required>
+                        <input type="text" name="card-name" placeholder="Name on card" required>
                         <div class="card-details">
-                            <input type="text" placeholder="MM/YY" required>
-                            <input type="text" placeholder="CVV" required>
+                            <input type="text" name="card-expiry" placeholder="MM/YY" required>
+                            <input type="text" name="card-cvv" placeholder="CVV" required>
                         </div>
                     </div>
 
