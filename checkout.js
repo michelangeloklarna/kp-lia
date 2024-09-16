@@ -3,28 +3,36 @@ function handleKlarnaScriptError() {
     console.error('Failed to load Klarna LIA script');
 }
 
-// Define the global klarnaAsyncCallback function
-window.klarnaAsyncCallback = function() {
-    console.log('LIA: Klarna SDK loaded');
-    
-    // Initialize Klarna LIA
-    Klarna.Lia.api().init({
-        container: "#klarna-payments-container"
-    }).then(function() {
-        console.log('LIA: Klarna LIA initialized successfully');
-        loadKlarnaPaymentMethods();
-    }).catch(function(error) {
-        console.error('LIA: Failed to initialize Klarna LIA:', error);
-    });
-};
-
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM fully loaded');
 
-    // Add this check at the beginning of the DOMContentLoaded event listener
-    if (typeof Klarna === 'undefined' || typeof Klarna.Lia === 'undefined') {
-        console.error('Klarna LIA script not loaded or initialized properly');
+    function initializeKlarna(retries = 3) {
+        if (typeof Klarna === 'undefined' || typeof Klarna.Lia === 'undefined') {
+            if (retries > 0) {
+                console.warn(`Klarna LIA not available, retrying in 1 second... (${retries} attempts left)`);
+                setTimeout(() => initializeKlarna(retries - 1), 1000);
+            } else {
+                console.error('Klarna LIA script not loaded or initialized properly after multiple attempts');
+            }
+        } else {
+            console.log('LIA: Klarna SDK loaded');
+            
+            // Initialize Klarna LIA
+            Klarna.Lia.api().init({
+                container: "#klarna-payments-container"
+            }).then(function() {
+                console.log('LIA: Klarna LIA initialized successfully');
+                // Only load Klarna payment methods if Klarna is selected
+                if (klarnaRadio.checked) {
+                    loadKlarnaPaymentMethods();
+                }
+            }).catch(function(error) {
+                console.error('LIA: Failed to initialize Klarna LIA:', error);
+            });
+        }
     }
+
+    initializeKlarna();
 
     var form = document.getElementById('checkout-form');
     var cardPaymentSection = document.getElementById('card-payment');
@@ -122,6 +130,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 field.required = false;
             });
             toggleCardFieldsRequired(false);
+            // Load Klarna payment methods when Klarna is selected
+            loadKlarnaPaymentMethods();
         }
     }
 
@@ -181,18 +191,38 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function loadKlarnaPaymentMethods() {
+        console.log('LIA: Attempting to load Klarna payment methods...');
+        
         if (typeof Klarna === 'undefined' || typeof Klarna.Lia === 'undefined') {
             console.error('Cannot load Klarna payment methods: Klarna LIA script not loaded or initialized properly');
             return;
         }
 
         var orderData = getOrderData();
+        console.log('LIA: Order data for Klarna load:', JSON.stringify(orderData, null, 2));
+
         Klarna.Lia.api().load({
             order: orderData
         }).then(function(result) {
-            console.log('LIA: Klarna payment methods loaded successfully');
+            console.log('LIA: Klarna payment methods loaded successfully. Result:', JSON.stringify(result, null, 2));
+            
+            // Make sure the Klarna container is visible
+            var klarnaContainer = document.getElementById('klarna-payments-container');
+            klarnaContainer.style.display = 'block';
+            console.log('LIA: Klarna container set to visible');
+
+            // Render the Klarna widget
+            console.log('LIA: Attempting to render Klarna widget...');
+            Klarna.Lia.api().render({
+                container: "#klarna-payments-container",
+                payment_method_categories: result.payment_method_categories
+            }).then(function() {
+                console.log('LIA: Klarna widget rendered successfully');
+            }).catch(function(renderError) {
+                console.error('LIA: Failed to render Klarna widget:', renderError);
+            });
         }).catch(function(error) {
-            console.error('LIA: Failed to load Klarna payment methods:', error);
+            console.error('LIA: Failed to load Klarna payment methods. Error:', error);
         });
     }
 
