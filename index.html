@@ -8,36 +8,89 @@
     <script src="https://x.klarnacdn.net/kp/lib/v1/api.js"></script>
 </head>
 <body>
+    <header>
+        <div class="logo">Checkout Page</div>
+    </header>
     <div class="container">
-        <h1>Checkout</h1>
-        <form id="checkout-form">
-            <div class="payment-methods">
-                <h2>Select Payment Method</h2>
-                <label>
-                    <input type="radio" name="payment-method" value="card" checked>
-                    Credit Card
-                </label>
-                <label>
-                    <input type="radio" name="payment-method" value="klarna">
-                    Klarna
-                </label>
-            </div>
+        <div class="checkout-container">
+            <div class="checkout-form">
+                <h1>Checkout</h1>
+                <form id="checkout-form">
+                    <div class="address-container">
+                        <div class="address-section">
+                            <h2>Shipping Address</h2>
+                            <input type="email" id="shipping-email" placeholder="Email" required>
+                            <input type="text" id="shipping-given-name" placeholder="First Name" required>
+                            <input type="text" id="shipping-family-name" placeholder="Last Name" required>
+                            <input type="tel" id="shipping-phone" placeholder="Phone" required>
+                            <input type="text" id="shipping-country" placeholder="Country" required>
+                            <input type="text" id="shipping-street-address" placeholder="Street Address" required>
+                            <input type="text" id="shipping-postal-code" placeholder="Postal Code" required>
+                            <input type="text" id="shipping-city" placeholder="City" required>
+                        </div>
 
-            <div id="card-payment" class="payment-section">
-                <!-- Add your card payment form fields here -->
-                <input type="text" placeholder="Card Number" required>
-                <input type="text" placeholder="Expiry Date" required>
-                <input type="text" placeholder="CVV" required>
-            </div>
+                        <div class="address-section">
+                            <h2>Billing Address</h2>
+                            <label><input type="checkbox" id="same-as-shipping" checked> Same as shipping</label>
+                            <div id="billing-address-fields">
+                                <input type="email" id="billing-email" placeholder="Email" required>
+                                <input type="text" id="billing-given-name" placeholder="First Name" required>
+                                <input type="text" id="billing-family-name" placeholder="Last Name" required>
+                                <input type="tel" id="billing-phone" placeholder="Phone" required>
+                                <input type="text" id="billing-country" placeholder="Country" required>
+                                <input type="text" id="billing-street-address" placeholder="Street Address" required>
+                                <input type="text" id="billing-postal-code" placeholder="Postal Code" required>
+                                <input type="text" id="billing-city" placeholder="City" required>
+                            </div>
+                        </div>
+                    </div>
 
-            <div id="klarna-payment" class="payment-section" style="display: none;">
-                <div id="klarna-payments-container"></div>
-            </div>
+                    <h2>Select a payment method</h2>
+                    <div class="payment-methods">
+                        <div class="payment-option">
+                            <input type="radio" id="card-option" name="payment-method" value="card" checked>
+                            <label for="card-option">
+                                <span class="radio-button"></span>
+                                Credit or Debit Card
+                            </label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" id="klarna-option" name="payment-method" value="klarna">
+                            <label for="klarna-option">
+                                <span class="radio-button"></span>
+                                Klarna
+                            </label>
+                        </div>
+                    </div>
 
-            <button type="submit" id="place-order-btn">Place Order</button>
-        </form>
+                    <div id="card-payment" class="payment-section">
+                        <input type="text" placeholder="Card Number" required>
+                        <input type="text" placeholder="Name on card" required>
+                        <div class="card-details">
+                            <input type="text" placeholder="MM/YY" required>
+                            <input type="text" placeholder="CVV" required>
+                        </div>
+                    </div>
+
+                    <div id="klarna-payment" class="payment-section" style="display: none;">
+                        <div id="klarna-payments-container"></div>
+                    </div>
+
+                    <button type="submit" id="place-order-btn">Place your order</button>
+                </form>
+            </div>
+            <div class="cart-summary">
+                <h2>Order Summary</h2>
+                <div class="cart-items">
+                    <!-- Cart items will be dynamically inserted here -->
+                </div>
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span id="cart-total-amount"></span>
+                </div>
+            </div>
+        </div>
     </div>
-
     <script src="checkout.js"></script>
 </body>
 </html>
