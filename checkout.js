@@ -1,3 +1,8 @@
+// Add this function at the beginning of the file
+function handleKlarnaScriptError() {
+    console.error('Failed to load Klarna LIA script');
+}
+
 // Define the global klarnaAsyncCallback function
 window.klarnaAsyncCallback = function() {
     console.log('LIA: Klarna SDK loaded');
@@ -15,6 +20,11 @@ window.klarnaAsyncCallback = function() {
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM fully loaded');
+
+    // Add this check at the beginning of the DOMContentLoaded event listener
+    if (typeof Klarna === 'undefined' || typeof Klarna.Lia === 'undefined') {
+        console.error('Klarna LIA script not loaded or initialized properly');
+    }
 
     var form = document.getElementById('checkout-form');
     var cardPaymentSection = document.getElementById('card-payment');
@@ -93,15 +103,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function togglePaymentSections() {
         console.log('LIA: Toggling payment sections');
+        const cardFields = cardPaymentSection.querySelectorAll('input');
         if (cardRadio.checked) {
             console.log('LIA: Card payment selected');
             cardPaymentSection.style.display = 'block';
             klarnaPaymentSection.style.display = 'none';
+            cardFields.forEach(field => {
+                field.disabled = false;
+                field.required = true;
+            });
             toggleCardFieldsRequired(true);
         } else if (klarnaRadio.checked) {
             console.log('LIA: Klarna payment selected');
             cardPaymentSection.style.display = 'none';
             klarnaPaymentSection.style.display = 'block';
+            cardFields.forEach(field => {
+                field.disabled = true;
+                field.required = false;
+            });
             toggleCardFieldsRequired(false);
         }
     }
@@ -162,6 +181,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function loadKlarnaPaymentMethods() {
+        if (typeof Klarna === 'undefined' || typeof Klarna.Lia === 'undefined') {
+            console.error('Cannot load Klarna payment methods: Klarna LIA script not loaded or initialized properly');
+            return;
+        }
+
         var orderData = getOrderData();
         Klarna.Lia.api().load({
             order: orderData
@@ -249,6 +273,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to update Klarna session
     function updateKlarnaSession() {
+        if (typeof Klarna === 'undefined' || typeof Klarna.Lia === 'undefined') {
+            console.error('Cannot update Klarna session: Klarna LIA script not loaded or initialized properly');
+            return;
+        }
+
         var orderData = getOrderData();
         Klarna.Lia.api().load({
             order: orderData
@@ -338,3 +367,34 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// Add this at the beginning of the file
+(function() {
+    var oldLog = console.log;
+    var oldError = console.error;
+    var oldWarn = console.warn;
+    var consoleLog = document.getElementById('console-log');
+
+    function appendToConsole(message, type) {
+        var line = document.createElement('div');
+        line.className = type;
+        line.textContent = message;
+        consoleLog.appendChild(line);
+        consoleLog.scrollTop = consoleLog.scrollHeight;
+    }
+
+    console.log = function(message) {
+        appendToConsole(message, 'log');
+        oldLog.apply(console, arguments);
+    };
+
+    console.error = function(message) {
+        appendToConsole('ERROR: ' + message, 'error');
+        oldError.apply(console, arguments);
+    };
+
+    console.warn = function(message) {
+        appendToConsole('WARNING: ' + message, 'warn');
+        oldWarn.apply(console, arguments);
+    };
+})();

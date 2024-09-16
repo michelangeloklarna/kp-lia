@@ -8,7 +8,8 @@
     <script
         src="https://cdn.cs.playground.klarna.com/lia/sdk/lia-sdk_eu.js"
         async
-></script>
+        onerror="handleKlarnaScriptError()"
+    ></script>
 </head>
 <body>
     <header>
@@ -94,6 +95,13 @@
             </div>
         </div>
     </div>
+    
+    <!-- Add this new section for console output -->
+    <div id="console-output" class="console-output">
+        <h3>Console Output</h3>
+        <pre id="console-log"></pre>
+    </div>
+    
     <script src="checkout.js"></script>
 </body>
 </html>
