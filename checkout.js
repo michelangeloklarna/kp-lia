@@ -11,6 +11,56 @@ document.addEventListener('DOMContentLoaded', function() {
     var sameAsShippingCheckbox = document.getElementById('same-as-shipping');
     var billingAddressFields = document.getElementById('billing-address-fields');
 
+    // Function to pre-fill shipping address with a random GB address
+    function prefillShippingAddress() {
+        const gbAddresses = [
+            {
+                email: 'john.smith@example.com',
+                given_name: 'John',
+                family_name: 'Smith',
+                phone: '07700 900123',
+                country: 'United Kingdom',
+                street_address: '10 Downing Street',
+                postal_code: 'SW1A 2AA',
+                city: 'London'
+            },
+            {
+                email: 'emma.watson@example.com',
+                given_name: 'Emma',
+                family_name: 'Watson',
+                phone: '07700 900456',
+                country: 'United Kingdom',
+                street_address: '221B Baker Street',
+                postal_code: 'NW1 6XE',
+                city: 'London'
+            },
+            {
+                email: 'david.jones@example.com',
+                given_name: 'David',
+                family_name: 'Jones',
+                phone: '07700 900789',
+                country: 'United Kingdom',
+                street_address: '1 Princes Street',
+                postal_code: 'EH2 2EQ',
+                city: 'Edinburgh'
+            }
+        ];
+
+        const randomAddress = gbAddresses[Math.floor(Math.random() * gbAddresses.length)];
+
+        document.getElementById('shipping-email').value = randomAddress.email;
+        document.getElementById('shipping-given-name').value = randomAddress.given_name;
+        document.getElementById('shipping-family-name').value = randomAddress.family_name;
+        document.getElementById('shipping-phone').value = randomAddress.phone;
+        document.getElementById('shipping-country').value = randomAddress.country;
+        document.getElementById('shipping-street-address').value = randomAddress.street_address;
+        document.getElementById('shipping-postal-code').value = randomAddress.postal_code;
+        document.getElementById('shipping-city').value = randomAddress.city;
+    }
+
+    // Call the function to pre-fill the shipping address
+    prefillShippingAddress();
+
     function togglePaymentSections() {
         console.log('LIA: Toggling payment sections');
         if (cardRadio.checked) {
