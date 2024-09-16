@@ -19,9 +19,15 @@
         <div class="checkout-container">
             <div class="checkout-form">
                 <h1>Checkout</h1>
+                <!-- Add this prefill option before the form -->
+                <div id="prefill-option">
+                    <label>
+                        <input type="checkbox" id="prefill-checkbox" checked disabled> Prefill form with sample data
+                    </label>
+                </div>
                 <form id="checkout-form">
                     <div class="address-container">
-                        <div class="address-section">
+                        <div class="address-section" id="shipping-address-section" style="display: none;">
                             <h2>Shipping Address</h2>
                             <input type="email" id="shipping-email" name="shipping-email" placeholder="Email" required>
                             <input type="text" id="shipping-given-name" name="shipping-given-name" placeholder="First Name" required>
@@ -35,16 +41,16 @@
 
                         <div class="address-section">
                             <h2>Billing Address</h2>
-                            <label><input type="checkbox" id="same-as-shipping" checked> Same as shipping</label>
-                            <div id="billing-address-fields" style="display: none;">
-                                <input type="email" id="billing-email" name="billing-email" placeholder="Email">
-                                <input type="text" id="billing-given-name" name="billing-given-name" placeholder="First Name">
-                                <input type="text" id="billing-family-name" name="billing-family-name" placeholder="Last Name">
-                                <input type="tel" id="billing-phone" name="billing-phone" placeholder="Phone">
-                                <input type="text" id="billing-country" name="billing-country" placeholder="Country">
-                                <input type="text" id="billing-street-address" name="billing-street-address" placeholder="Street Address">
-                                <input type="text" id="billing-postal-code" name="billing-postal-code" placeholder="Postal Code">
-                                <input type="text" id="billing-city" name="billing-city" placeholder="City">
+                            <label><input type="checkbox" id="same-as-shipping" checked disabled> Same as shipping</label>
+                            <div id="billing-address-fields">
+                                <input type="email" id="billing-email" name="billing-email" value="michelangelo.casullo@klarna.com" readonly>
+                                <input type="text" id="billing-given-name" name="billing-given-name" value="Michelangelo" readonly>
+                                <input type="text" id="billing-family-name" name="billing-family-name" value="Casullo" readonly>
+                                <input type="tel" id="billing-phone" name="billing-phone" value="+447491340073" readonly>
+                                <input type="text" id="billing-country" name="billing-country" value="GB" readonly>
+                                <input type="text" id="billing-street-address" name="billing-street-address" value="108 Fleet Road" readonly>
+                                <input type="text" id="billing-postal-code" name="billing-postal-code" value="NW32QX" readonly>
+                                <input type="text" id="billing-city" name="billing-city" value="London" readonly>
                             </div>
                         </div>
                     </div>
