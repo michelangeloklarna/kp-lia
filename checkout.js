@@ -26,21 +26,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Define the global klarnaAsyncCallback function
 window.klarnaAsyncCallback = function() {
-    console.log("Klarna SDK has finished loading. It's now safe to use the window.Klarna object.");
-    document.getElementById('console-log').textContent += "Klarna SDK has finished loading. It's now safe to use the window.Klarna object.\n";
-
-    // Initialize Klarna LIA SDK
-    try {
-        Klarna.Lia.api().init({
-            container: "#klarna-payments-container"
-        });
-        console.log("Klarna LIA SDK initialized successfully");
-        document.getElementById('console-log').textContent += "Klarna LIA SDK initialized successfully\n";
-    } catch (error) {
-        console.error("Error initializing Klarna LIA SDK:", error);
-        document.getElementById('console-log').textContent += "Error initializing Klarna LIA SDK: " + error + "\n";
-    }
+    console.log("Klarna SDK has finished loading.");
+    initKlarna();
 };
+
+function initKlarna() {
+    try {
+        Klarna.Payments.init({
+            client_token: "YOUR_CLIENT_TOKEN_HERE"
+        });
+        console.log("Klarna Payments SDK initialized successfully");
+    } catch (error) {
+        console.error("Error initializing Klarna Payments SDK:", error);
+    }
+}
 
 function loadKlarnaWidget() {
     const klarnaRequest = {
@@ -54,7 +53,7 @@ function loadKlarnaWidget() {
                 "unit_price": 29900,
                 "total_amount": 29900,
                 "quantity": 1,
-                "reference": "11d609c0-0609-4b3b-a472-40175828ebe2"
+                "reference": "11d609c0-0609-4b3b-a472-40175828ebe1"
             },
             {
                 "name": "adidas Supernova Stride Men's Sports Trainers",
@@ -66,27 +65,63 @@ function loadKlarnaWidget() {
         ]
     };
 
-    console.log("Klarna LIA SDK Request:", JSON.stringify(klarnaRequest, null, 2));
-    document.getElementById('console-log').textContent += "Klarna LIA SDK Request: " + JSON.stringify(klarnaRequest, null, 2) + "\n";
+    console.log("Klarna LIA SDK 'load' operation - Full Payload:", {
+        container: "#klarna-payments-container",
+        klarnaRequest: klarnaRequest
+    });
 
     try {
+        if (!Klarna || !Klarna.Lia) {
+            throw new Error("Klarna LIA SDK not loaded or initialized properly");
+        }
+
         Klarna.Lia.api().load(
             {
                 container: "#klarna-payments-container",
             },
             klarnaRequest,
             function(res) {
-                // load~callback
-                console.log("Klarna LIA SDK Response:", JSON.stringify(res, null, 2));
-                document.getElementById('console-log').textContent += "Klarna LIA SDK Response: " + JSON.stringify(res, null, 2) + "\n";
-                console.log("Klarna widget loaded successfully");
-                document.getElementById('console-log').textContent += "Klarna widget loaded successfully\n";
+                console.log("Klarna LIA SDK 'load' operation - Full Response:", res);
+                if (res.success) {
+                    console.log("Klarna widget loaded successfully");
+                } else {
+                    console.error("Klarna widget not loaded:", res.error);
+                }
             }
         );
     } catch (error) {
-        console.error("Error loading Klarna widget:", error);
-        document.getElementById('console-log').textContent += "Error loading Klarna widget: " + error + "\n";
+        console.error("Error in Klarna LIA SDK 'load' operation:", error);
     }
 }
 
-// ... existing code ...
+function authorizeKlarnaPayment() {
+    try {
+        Klarna.Payments.authorize({
+            payment_method_category: "pay_later"
+        }, function(res) {
+            console.log("Klarna payment authorized:", res);
+            if (res.approved) {
+                // Payment approved, proceed with order confirmation
+                console.log("Payment approved. Authorization token:", res.authorization_token);
+            } else {
+                // Payment not approved
+                console.log("Payment not approved:", res.error);
+            }
+        });
+    } catch (error) {
+        console.error("Error authorizing Klarna payment:", error);
+    }
+}
+
+// Call loadKlarnaWidget when the Klarna payment option is selected
+document.getElementById('klarna-option').addEventListener('change', function() {
+    if (this.checked) {
+        loadKlarnaWidget();
+    }
+});
+
+// Add a button or event listener to trigger the authorization when needed
+document.getElementById('place-order-button').addEventListener('click', function(event) {
+    event.preventDefault();
+    authorizeKlarnaPayment();
+});
