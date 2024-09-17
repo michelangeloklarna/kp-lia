@@ -82,9 +82,7 @@ function loadKlarnaWidget() {
 
 function authorizeKlarnaPayment() {
     try {
-        Klarna.Payments.authorize({
-            payment_method_category: "pay_later"
-        }, function(res) {
+        Klarna.Lia.api().authorize({}, function(res) {
             console.log("Klarna payment authorized:", res);
             if (res.approved) {
                 // Payment approved, proceed with order confirmation
