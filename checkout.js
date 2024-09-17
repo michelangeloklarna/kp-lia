@@ -43,35 +43,42 @@ window.klarnaAsyncCallback = function() {
 };
 
 function loadKlarnaWidget() {
+    const klarnaRequest = {
+        "locale": "en-GB",
+        "purchase_country": "GB",
+        "purchase_currency": "GBP",
+        "order_amount": 38900,
+        "order_lines": [
+            {
+                "name": "LG 43UR78006LK 2023",
+                "unit_price": 29900,
+                "total_amount": 29900,
+                "quantity": 1,
+                "reference": "11d609c0-0609-4b3b-a472-40175828ebe2"
+            },
+            {
+                "name": "adidas Supernova Stride Men's Sports Trainers",
+                "unit_price": 9000,
+                "total_amount": 9000,
+                "quantity": 1,
+                "reference": "11d609c0-0609-4b3b-a472-40175828ebe2"
+            }
+        ]
+    };
+
+    console.log("Klarna LIA SDK Request:", JSON.stringify(klarnaRequest, null, 2));
+    document.getElementById('console-log').textContent += "Klarna LIA SDK Request: " + JSON.stringify(klarnaRequest, null, 2) + "\n";
+
     try {
         Klarna.Lia.api().load(
             {
                 container: "#klarna-payments-container",
             },
-            {
-                "locale": "en-GB",
-                "purchase_country": "GB",
-                "purchase_currency": "GBP",
-                "order_amount": 38900,
-                "order_lines": [
-                    {
-                        "name": "LG 43UR78006LK 2023",
-                        "unit_price": 29900,
-                        "total_amount": 29900,
-                        "quantity": 1,
-                        "reference": "11d609c0-0609-4b3b-a472-40175828ebe2"
-                    },
-                    {
-                        "name": "adidas Supernova Stride Men's Sports Trainers",
-                        "unit_price": 9000,
-                        "total_amount": 9000,
-                        "quantity": 1,
-                        "reference": "11d609c0-0609-4b3b-a472-40175828ebe2"
-                    }
-                ]
-            },
+            klarnaRequest,
             function(res) {
                 // load~callback
+                console.log("Klarna LIA SDK Response:", JSON.stringify(res, null, 2));
+                document.getElementById('console-log').textContent += "Klarna LIA SDK Response: " + JSON.stringify(res, null, 2) + "\n";
                 console.log("Klarna widget loaded successfully");
                 document.getElementById('console-log').textContent += "Klarna widget loaded successfully\n";
             }
