@@ -23,19 +23,19 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Load Klarna SDK
+  // Load Klarna LIA SDK
   const script = document.createElement('script');
-  script.src = 'https://x.klarnacdn.net/lia/lib/v1/api.js';
+  script.src = 'https://cdn.cs.playground.klarna.com/lia/sdk/lia-sdk_eu.js';
   script.async = true;
   document.body.appendChild(script);
 
   script.onload = function() {
-    console.log("Klarna SDK script loaded");
+    console.log("Klarna LIA SDK script loaded");
     window.klarnaAsyncCallback();
   };
 
   script.onerror = function() {
-    console.error("Failed to load Klarna SDK script");
+    console.error("Failed to load Klarna LIA SDK script");
   };
 });
 
