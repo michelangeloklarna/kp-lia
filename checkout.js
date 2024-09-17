@@ -49,24 +49,24 @@ function loadKlarnaWidget() {
                 container: "#klarna-payments-container",
             },
             {
-                locale: "en-GB",
-                purchase_country: "GB",
-                purchase_currency: "GBP",
-                order_amount: 38900,
-                order_lines: [
+                "locale": "en-GB",
+                "purchase_country": "GB",
+                "purchase_currency": "GBP",
+                "order_amount": 38900,
+                "order_lines": [
                     {
-                        name: "LG 43UR78006LK 2023",
-                        unit_price: 29900,
-                        total_amount: 29900,
-                        qty: 1,
-                        merchant_reference1: "11d609c0-0609-4b3b-a472-40175828ebe2"
+                        "name": "LG 43UR78006LK 2023",
+                        "unit_price": 29900,
+                        "total_amount": 29900,
+                        "quantity": 1,
+                        "reference": "11d609c0-0609-4b3b-a472-40175828ebe2"
                     },
                     {
-                        name: "adidas Supernova Stride Men's Sports Trainers",
-                        unit_price: 9000,
-                        total_amount: 9000,
-                        qty: 1,
-                        merchant_reference1: "11d609c0-0609-4b3b-a472-40175828ebe2"
+                        "name": "adidas Supernova Stride Men's Sports Trainers",
+                        "unit_price": 9000,
+                        "total_amount": 9000,
+                        "quantity": 1,
+                        "reference": "11d609c0-0609-4b3b-a472-40175828ebe2"
                     }
                 ]
             },
