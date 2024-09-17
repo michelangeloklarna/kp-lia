@@ -32,45 +32,49 @@ window.klarnaAsyncCallback = function() {
 
 function initKlarna() {
     try {
-        Klarna.Payments.init({
+        Klarna.Lia.init({
             container: "#klarna-payments-container"
         });
-        console.log("Klarna Payments SDK initialized successfully");
+        console.log("Klarna LIA SDK initialized successfully");
     } catch (error) {
-        console.error("Error initializing Klarna Payments SDK:", error);
+        console.error("Error initializing Klarna LIA SDK:", error);
     }
 }
 
 function loadKlarnaWidget() {
     const klarnaRequest = {
-        "locale": "en-GB",
-        "purchase_country": "GB",
-        "purchase_currency": "GBP",
-        "order_amount": 38900,
-        "order_lines": [
+        locale: "en-GB",
+        purchase_country: "GB",
+        purchase_currency: "GBP",
+        order_amount: 38900,
+        order_lines: [
             {
-                "name": "LG 43UR78006LK 2023",
-                "unit_price": 29900,
-                "total_amount": 29900,
-                "quantity": 1,
-                "reference": "11d609c0-0609-4b3b-a472-40175828ebe1"
+                name: "LG 43UR78006LK 2023",
+                unit_price: 29900,
+                total_amount: 29900,
+                quantity: 1,
+                reference: "11d609c0-0609-4b3b-a472-40175828ebe1"
             },
             {
-                "name": "adidas Supernova Stride Men's Sports Trainers",
-                "unit_price": 9000,
-                "total_amount": 9000,
-                "quantity": 1,
-                "reference": "11d609c0-0609-4b3b-a472-40175828ebe2"
+                name: "adidas Supernova Stride Men's Sports Trainers",
+                unit_price: 9000,
+                total_amount: 9000,
+                quantity: 1,
+                reference: "11d609c0-0609-4b3b-a472-40175828ebe2"
             }
         ]
     };
 
     try {
-        Klarna.Payments.load({
-            payment_method_category: "pay_later"
-        }, klarnaRequest, function(res) {
-            console.log("Klarna widget loaded successfully", res);
-        });
+        Klarna.Lia.api().load(
+            {
+                container: "#klarna-payments-container"
+            },
+            klarnaRequest,
+            function(res) {
+                console.log("Klarna widget loaded successfully", res);
+            }
+        );
     } catch (error) {
         console.error("Error loading Klarna widget:", error);
     }
