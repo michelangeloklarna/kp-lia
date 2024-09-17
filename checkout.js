@@ -33,7 +33,7 @@ window.klarnaAsyncCallback = function() {
 function initKlarna() {
     try {
         Klarna.Payments.init({
-            client_token: "YOUR_CLIENT_TOKEN_HERE"
+            container: "#klarna-payments-container"
         });
         console.log("Klarna Payments SDK initialized successfully");
     } catch (error) {
@@ -65,32 +65,14 @@ function loadKlarnaWidget() {
         ]
     };
 
-    console.log("Klarna LIA SDK 'load' operation - Full Payload:", {
-        container: "#klarna-payments-container",
-        klarnaRequest: klarnaRequest
-    });
-
     try {
-        if (!Klarna || !Klarna.Lia) {
-            throw new Error("Klarna LIA SDK not loaded or initialized properly");
-        }
-
-        Klarna.Lia.api().load(
-            {
-                container: "#klarna-payments-container",
-            },
-            klarnaRequest,
-            function(res) {
-                console.log("Klarna LIA SDK 'load' operation - Full Response:", res);
-                if (res.success) {
-                    console.log("Klarna widget loaded successfully");
-                } else {
-                    console.error("Klarna widget not loaded:", res.error);
-                }
-            }
-        );
+        Klarna.Payments.load({
+            payment_method_category: "pay_later"
+        }, klarnaRequest, function(res) {
+            console.log("Klarna widget loaded successfully", res);
+        });
     } catch (error) {
-        console.error("Error in Klarna LIA SDK 'load' operation:", error);
+        console.error("Error loading Klarna widget:", error);
     }
 }
 
