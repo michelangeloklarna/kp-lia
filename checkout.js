@@ -1,7 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const shippingAddressSection = document.getElementById(
-    "shipping-address-section"
-  );
+  const shippingAddressSection = document.getElementById("shipping-address-section");
   const klarnaOption = document.getElementById("klarna-option");
   const klarnaPayment = document.getElementById("klarna-payment");
   const cardPayment = document.getElementById("card-payment");
@@ -14,18 +12,16 @@ document.addEventListener("DOMContentLoaded", function () {
     if (this.checked) {
       klarnaPayment.style.display = "block";
       cardPayment.style.display = "none";
-      initAndLoadKlarnaWidget();
+      loadKlarnaWidget();
     }
   });
 
-  document
-    .getElementById("card-option")
-    .addEventListener("change", function () {
-      if (this.checked) {
-        klarnaPayment.style.display = "none";
-        cardPayment.style.display = "block";
-      }
-    });
+  document.getElementById("card-option").addEventListener("change", function () {
+    if (this.checked) {
+      klarnaPayment.style.display = "none";
+      cardPayment.style.display = "block";
+    }
+  });
 
   // Load Klarna SDK
   const script = document.createElement('script');
@@ -35,11 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   script.onload = function() {
     console.log("Klarna SDK script loaded");
-    if (window.Klarna && window.Klarna.Lia) {
-      initKlarna();
-    } else {
-      console.error("Klarna SDK not available after script load");
-    }
+    window.klarnaAsyncCallback();
   };
 
   script.onerror = function() {
@@ -50,23 +42,13 @@ document.addEventListener("DOMContentLoaded", function () {
 // Define the global klarnaAsyncCallback function
 window.klarnaAsyncCallback = function () {
   console.log("Klarna SDK has finished loading.");
-  initKlarna();
+  Klarna.Lia.init({
+    container: "#klarna-payments-container",
+  });
 };
 
-function initKlarna() {
-  console.log("Initializing Klarna");
-  try {
-    Klarna.Lia.init({
-      container: "#klarna-payments-container",
-    });
-    console.log("Klarna LIA SDK initialized successfully");
-  } catch (error) {
-    console.error("Error initializing Klarna LIA SDK:", error);
-  }
-}
-
-function initAndLoadKlarnaWidget() {
-  console.log("Initializing and loading Klarna widget");
+function loadKlarnaWidget() {
+  console.log("Loading Klarna widget");
   const klarnaRequest = {
     locale: "en-GB",
     purchase_country: "GB",
@@ -90,47 +72,24 @@ function initAndLoadKlarnaWidget() {
     ],
   };
 
-  try {
-    Klarna.Lia.load(klarnaRequest, function (res) {
-      console.log("Klarna widget loaded successfully", res);
-    });
-  } catch (error) {
-    console.error("Error loading Klarna widget:", error);
-  }
+  Klarna.Lia.load(klarnaRequest, function (res) {
+    console.log("Klarna widget loaded", res);
+  });
 }
 
 function authorizeKlarnaPayment() {
   console.log("Authorizing Klarna payment");
-  try {
-    Klarna.Lia.authorize({}, function (res) {
-      console.log("Klarna payment authorized:", res);
-      if (res.approved) {
-        console.log(
-          "Payment approved. Authorization token:",
-          res.authorization_token
-        );
-      } else {
-        console.log("Payment not approved:", res.error);
-      }
-    });
-  } catch (error) {
-    console.error("Error authorizing Klarna payment:", error);
-  }
-}
-
-// Call loadKlarnaWidget when the Klarna payment option is selected
-document
-  .getElementById("klarna-option")
-  .addEventListener("change", function () {
-    if (this.checked) {
-      loadKlarnaWidget();
+  Klarna.Lia.authorize({}, function (res) {
+    console.log("Klarna payment authorization response:", res);
+    if (res.approved) {
+      console.log("Payment approved. Authorization token:", res.authorization_token);
+    } else {
+      console.log("Payment not approved:", res.error);
     }
   });
+}
 
-// Add a button or event listener to trigger the authorization when needed
-document
-  .getElementById("place-order-button")
-  .addEventListener("click", function (event) {
-    event.preventDefault();
-    authorizeKlarnaPayment();
-  });
+document.getElementById("place-order-button").addEventListener("click", function (event) {
+  event.preventDefault();
+  authorizeKlarnaPayment();
+});
