@@ -1,14 +1,26 @@
+console.log("Script started");
+
 document.addEventListener("DOMContentLoaded", function () {
+  console.log("DOM content loaded");
+
   const shippingAddressSection = document.getElementById("shipping-address-section");
   const klarnaOption = document.getElementById("klarna-option");
   const klarnaPayment = document.getElementById("klarna-payment");
   const cardPayment = document.getElementById("card-payment");
+
+  if (!shippingAddressSection || !klarnaOption || !klarnaPayment || !cardPayment) {
+    console.error("One or more elements not found");
+    return;
+  }
+
+  console.log("All elements found");
 
   // Hide shipping address section by default
   shippingAddressSection.style.display = "none";
 
   // Add event listener for payment method selection
   klarnaOption.addEventListener("change", function () {
+    console.log("Klarna option changed");
     if (this.checked) {
       klarnaPayment.style.display = "block";
       cardPayment.style.display = "none";
@@ -17,6 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   document.getElementById("card-option").addEventListener("change", function () {
+    console.log("Card option changed");
     if (this.checked) {
       klarnaPayment.style.display = "none";
       cardPayment.style.display = "block";
@@ -29,26 +42,30 @@ document.addEventListener("DOMContentLoaded", function () {
   script.async = true;
   document.body.appendChild(script);
 
-  script.onload = function() {
-    console.log("Klarna LIA SDK script loaded");
-    window.klarnaAsyncCallback();
-  };
-
-  script.onerror = function() {
-    console.error("Failed to load Klarna LIA SDK script");
-  };
+  console.log("Script added to body");
 });
 
 // Define the global klarnaAsyncCallback function
 window.klarnaAsyncCallback = function () {
-  console.log("Klarna SDK has finished loading.");
-  Klarna.Lia.init({
-    container: "#klarna-payments-container",
-  });
+  console.log("klarnaAsyncCallback called");
+  if (window.Klarna && window.Klarna.Lia) {
+    console.log("Klarna SDK has finished loading.");
+    Klarna.Lia.init({
+      container: "#klarna-payments-container"
+    });
+    console.log("Klarna.Lia.init called");
+  } else {
+    console.error("Klarna.Lia not available in klarnaAsyncCallback");
+  }
 };
 
 function loadKlarnaWidget() {
-  console.log("Loading Klarna widget");
+  console.log("loadKlarnaWidget called");
+  if (!window.Klarna || !window.Klarna.Lia) {
+    console.error("Klarna.Lia not available in loadKlarnaWidget");
+    return;
+  }
+
   const klarnaRequest = {
     locale: "en-GB",
     purchase_country: "GB",
@@ -78,7 +95,12 @@ function loadKlarnaWidget() {
 }
 
 function authorizeKlarnaPayment() {
-  console.log("Authorizing Klarna payment");
+  console.log("authorizeKlarnaPayment called");
+  if (!window.Klarna || !window.Klarna.Lia) {
+    console.error("Klarna.Lia not available in authorizeKlarnaPayment");
+    return;
+  }
+
   Klarna.Lia.authorize({}, function (res) {
     console.log("Klarna payment authorization response:", res);
     if (res.approved) {
@@ -90,6 +112,9 @@ function authorizeKlarnaPayment() {
 }
 
 document.getElementById("place-order-button").addEventListener("click", function (event) {
+  console.log("Place order button clicked");
   event.preventDefault();
   authorizeKlarnaPayment();
 });
+
+console.log("Script ended");
