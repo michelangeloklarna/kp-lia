@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (this.checked) {
             klarnaPayment.style.display = 'block';
             cardPayment.style.display = 'none';
-            loadKlarnaWidget();
+            initAndLoadKlarnaWidget();
         }
     });
 
@@ -41,7 +41,7 @@ function initKlarna() {
     }
 }
 
-function loadKlarnaWidget() {
+function initAndLoadKlarnaWidget() {
     const klarnaRequest = {
         locale: "en-GB",
         purchase_country: "GB",
@@ -66,23 +66,22 @@ function loadKlarnaWidget() {
     };
 
     try {
-        Klarna.Lia.api().load(
-            {
-                container: "#klarna-payments-container"
-            },
-            klarnaRequest,
-            function(res) {
-                console.log("Klarna widget loaded successfully", res);
-            }
-        );
+        Klarna.Lia.init({
+            container: "#klarna-payments-container",
+            payment_method_categories: ["pay_later", "pay_now", "pay_over_time"]
+        });
+
+        Klarna.Lia.load(klarnaRequest, function(res) {
+            console.log("Klarna widget loaded successfully", res);
+        });
     } catch (error) {
-        console.error("Error loading Klarna widget:", error);
+        console.error("Error initializing or loading Klarna widget:", error);
     }
 }
 
 function authorizeKlarnaPayment() {
     try {
-        Klarna.Lia.api().authorize({}, function(res) {
+        Klarna.Lia.authorize({}, function(res) {
             console.log("Klarna payment authorized:", res);
             if (res.approved) {
                 // Payment approved, proceed with order confirmation
