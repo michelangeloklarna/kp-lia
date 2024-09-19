@@ -35,14 +35,6 @@ document.addEventListener("DOMContentLoaded", function () {
       cardPayment.style.display = "block";
     }
   });
-
-  // Load Klarna LIA SDK
-  const script = document.createElement('script');
-  script.src = 'https://cdn.cs.playground.klarna.com/lia/sdk/lia-sdk_eu.js';
-  script.async = true;
-  document.body.appendChild(script);
-
-  console.log("Script added to body");
 });
 
 // Define the global klarnaAsyncCallback function
