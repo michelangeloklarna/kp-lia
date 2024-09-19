@@ -51,10 +51,10 @@ window.klarnaAsyncCallback = function () {
   if (window.Klarna && window.Klarna.Lia) {
     console.log("Klarna SDK has finished loading.");
     try {
-      Klarna.Lia.init({
+      Klarna.Lia.api().init({
         container: "#klarna-payments-container"
       });
-      console.log("Klarna.Lia.init called successfully");
+      console.log("Klarna.Lia.api().init called successfully");
     } catch (error) {
       console.error("Error initializing Klarna Lia:", error);
     }
@@ -94,7 +94,7 @@ function loadKlarnaWidget() {
   };
 
   try {
-    Klarna.Lia.load(klarnaRequest, function (res) {
+    Klarna.Lia.api().load(klarnaRequest, function (res) {
       console.log("Klarna widget loaded", res);
     });
   } catch (error) {
