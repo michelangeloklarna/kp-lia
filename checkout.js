@@ -1,9 +1,15 @@
 let logEntries = [];
 
-function logToConsole(message) {
+function logToConsole(message, object = null) {
   const timestamp = new Date().toISOString();
-  const logEntry = `${timestamp}: ${message}`;
-  console.log(logEntry);
+  let logEntry = `${timestamp}: ${message}`;
+  
+  if (object) {
+    console.log(logEntry, object);
+    logEntry += '\n' + JSON.stringify(object, null, 2);
+  } else {
+    console.log(logEntry);
+  }
   
   logEntries.unshift(logEntry); // Add new entry to the beginning of the array
   
@@ -115,14 +121,16 @@ function loadKlarnaWidget() {
     ]
   };
 
+  logToConsole("Klarna request object:", klarnaRequest);
+
   try {
     Klarna.Lia.api().load({
       container: "#klarna-payments-container"
     }, klarnaRequest, function (res) {
-      logToConsole("Klarna widget loaded: " + JSON.stringify(res));
+      logToConsole("Klarna widget loaded:", res);
     });
   } catch (error) {
-    logToConsole("Error loading Klarna widget: " + error.message);
+    logToConsole("Error loading Klarna widget:", error);
   }
 }
 
