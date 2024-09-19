@@ -11,97 +11,101 @@
     <header>
         <div class="logo">Checkout Page</div>
     </header>
-    <div class="container">
-        <div class="checkout-container">
-            <div class="checkout-form">
-                <h1>Checkout</h1>
-                <!-- Add this prefill option before the form -->
-                <div id="prefill-option">
-                    <label>
-                        <input type="checkbox" id="prefill-checkbox" checked disabled> Prefill form with sample data
-                    </label>
-                </div>
-                <form id="checkout-form">
-                    <div class="address-container">
-                        <div class="address-section" id="shipping-address-section" style="display: none;">
-                            <h2>Shipping Address</h2>
-                            <input type="email" id="shipping-email" name="shipping-email" placeholder="Email" required>
-                            <input type="text" id="shipping-given-name" name="shipping-given-name" placeholder="First Name" required>
-                            <input type="text" id="shipping-family-name" name="shipping-family-name" placeholder="Last Name" required>
-                            <input type="tel" id="shipping-phone" name="shipping-phone" placeholder="Phone" required>
-                            <input type="text" id="shipping-country" name="shipping-country" placeholder="Country" required>
-                            <input type="text" id="shipping-street-address" name="shipping-street-address" placeholder="Street Address" required>
-                            <input type="text" id="shipping-postal-code" name="shipping-postal-code" placeholder="Postal Code" required>
-                            <input type="text" id="shipping-city" name="shipping-city" placeholder="City" required>
+    <div class="main-content">
+        <div class="checkout-area">
+            <div class="container">
+                <div class="checkout-container">
+                    <div class="checkout-form">
+                        <h1>Checkout</h1>
+                        <!-- Add this prefill option before the form -->
+                        <div id="prefill-option">
+                            <label>
+                                <input type="checkbox" id="prefill-checkbox" checked disabled> Prefill form with sample data
+                            </label>
                         </div>
+                        <form id="checkout-form">
+                            <div class="address-container">
+                                <div class="address-section" id="shipping-address-section" style="display: none;">
+                                    <h2>Shipping Address</h2>
+                                    <input type="email" id="shipping-email" name="shipping-email" placeholder="Email" required>
+                                    <input type="text" id="shipping-given-name" name="shipping-given-name" placeholder="First Name" required>
+                                    <input type="text" id="shipping-family-name" name="shipping-family-name" placeholder="Last Name" required>
+                                    <input type="tel" id="shipping-phone" name="shipping-phone" placeholder="Phone" required>
+                                    <input type="text" id="shipping-country" name="shipping-country" placeholder="Country" required>
+                                    <input type="text" id="shipping-street-address" name="shipping-street-address" placeholder="Street Address" required>
+                                    <input type="text" id="shipping-postal-code" name="shipping-postal-code" placeholder="Postal Code" required>
+                                    <input type="text" id="shipping-city" name="shipping-city" placeholder="City" required>
+                                </div>
 
-                        <div class="address-section">
-                            <h2>Billing Address</h2>
-                            <label><input type="checkbox" id="same-as-shipping" checked disabled> Same as shipping</label>
-                            <div id="billing-address-fields">
-                                <input type="email" id="billing-email" name="billing-email" value="michelangelo.casullo@klarna.com" readonly>
-                                <input type="text" id="billing-given-name" name="billing-given-name" value="Michelangelo" readonly>
-                                <input type="text" id="billing-family-name" name="billing-family-name" value="Casullo" readonly>
-                                <input type="tel" id="billing-phone" name="billing-phone" value="+447491340073" readonly>
-                                <input type="text" id="billing-country" name="billing-country" value="GB" readonly>
-                                <input type="text" id="billing-street-address" name="billing-street-address" value="108 Fleet Road" readonly>
-                                <input type="text" id="billing-postal-code" name="billing-postal-code" value="NW32QX" readonly>
-                                <input type="text" id="billing-city" name="billing-city" value="London" readonly>
+                                <div class="address-section">
+                                    <h2>Billing Address</h2>
+                                    <label><input type="checkbox" id="same-as-shipping" checked disabled> Same as shipping</label>
+                                    <div id="billing-address-fields">
+                                        <input type="email" id="billing-email" name="billing-email" value="michelangelo.casullo@klarna.com" readonly>
+                                        <input type="text" id="billing-given-name" name="billing-given-name" value="Michelangelo" readonly>
+                                        <input type="text" id="billing-family-name" name="billing-family-name" value="Casullo" readonly>
+                                        <input type="tel" id="billing-phone" name="billing-phone" value="+447491340073" readonly>
+                                        <input type="text" id="billing-country" name="billing-country" value="GB" readonly>
+                                        <input type="text" id="billing-street-address" name="billing-street-address" value="108 Fleet Road" readonly>
+                                        <input type="text" id="billing-postal-code" name="billing-postal-code" value="NW32QX" readonly>
+                                        <input type="text" id="billing-city" name="billing-city" value="London" readonly>
+                                    </div>
+                                </div>
                             </div>
+
+                            <h2>Select a payment method</h2>
+                            <div class="payment-methods">
+                                <div class="payment-option">
+                                    <input type="radio" id="card-option" name="payment-method" value="card" checked>
+                                    <label for="card-option">
+                                        <span class="radio-button"></span>
+                                        Credit or Debit Card
+                                    </label>
+                                </div>
+                                <div class="payment-option">
+                                    <input type="radio" id="klarna-option" name="payment-method" value="klarna">
+                                    <label for="klarna-option">
+                                        <span class="radio-button"></span>
+                                        Klarna
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div id="card-payment" class="payment-section">
+                                <input type="text" name="card-number" placeholder="Card Number" required>
+                                <input type="text" name="card-name" placeholder="Name on card" required>
+                                <div class="card-details">
+                                    <input type="text" name="card-expiry" placeholder="MM/YY" required>
+                                    <input type="text" name="card-cvv" placeholder="CVV" required>
+                                </div>
+                            </div>
+
+                            <div id="klarna-payment" class="payment-section" style="display: none;">
+                                <div id="klarna-payments-container"></div>
+                            </div>
+
+                            <button type="submit" id="place-order-btn">Place your order</button>
+                        </form>
+                    </div>
+                    <div class="cart-summary">
+                        <h2>Order Summary</h2>
+                        <div class="cart-items">
+                            <!-- Cart items will be dynamically inserted here -->
+                        </div>
+                        <div class="cart-total">
+                            <span>Total:</span>
+                            <span id="cart-total-amount"></span>
                         </div>
                     </div>
-
-                    <h2>Select a payment method</h2>
-                    <div class="payment-methods">
-                        <div class="payment-option">
-                            <input type="radio" id="card-option" name="payment-method" value="card" checked>
-                            <label for="card-option">
-                                <span class="radio-button"></span>
-                                Credit or Debit Card
-                            </label>
-                        </div>
-                        <div class="payment-option">
-                            <input type="radio" id="klarna-option" name="payment-method" value="klarna">
-                            <label for="klarna-option">
-                                <span class="radio-button"></span>
-                                Klarna
-                            </label>
-                        </div>
-                    </div>
-
-                    <div id="card-payment" class="payment-section">
-                        <input type="text" name="card-number" placeholder="Card Number" required>
-                        <input type="text" name="card-name" placeholder="Name on card" required>
-                        <div class="card-details">
-                            <input type="text" name="card-expiry" placeholder="MM/YY" required>
-                            <input type="text" name="card-cvv" placeholder="CVV" required>
-                        </div>
-                    </div>
-
-                    <div id="klarna-payment" class="payment-section" style="display: none;">
-                        <div id="klarna-payments-container"></div>
-                    </div>
-
-                    <button type="submit" id="place-order-btn">Place your order</button>
-                </form>
-            </div>
-            <div class="cart-summary">
-                <h2>Order Summary</h2>
-                <div class="cart-items">
-                    <!-- Cart items will be dynamically inserted here -->
-                </div>
-                <div class="cart-total">
-                    <span>Total:</span>
-                    <span id="cart-total-amount"></span>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <!-- Add this new section for console output -->
-    <div id="console-output" class="console-output">
-        <h3>Console Output</h3>
-        <pre id="console-log"></pre>
+        <div class="console-container">
+            <div class="console-output">
+                <h3>Console Output</h3>
+                <pre id="console-log"></pre>
+            </div>
+        </div>
     </div>
     
     <script src="checkout.js"></script>
