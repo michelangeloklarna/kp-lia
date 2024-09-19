@@ -76,16 +76,6 @@ function loadKlarnaWidget() {
     return;
   }
 
-  const container = document.getElementById("klarna-payments-container");
-  if (container) {
-    console.log("Klarna container found for loading:", container);
-    // Ensure the container is visible
-    container.style.display = "block";
-  } else {
-    console.error("Klarna container not found for loading");
-    return;
-  }
-
   const klarnaRequest = {
     locale: "en-GB",
     purchase_country: "GB",
@@ -110,7 +100,9 @@ function loadKlarnaWidget() {
   };
 
   try {
-    Klarna.Lia.api().load(klarnaRequest, function (res) {
+    Klarna.Lia.api().load({
+      container: "#klarna-payments-container"
+    }, klarnaRequest, function (res) {
       console.log("Klarna widget loaded", res);
     });
   } catch (error) {
