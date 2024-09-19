@@ -50,10 +50,14 @@ window.klarnaAsyncCallback = function () {
   console.log("klarnaAsyncCallback called");
   if (window.Klarna && window.Klarna.Lia) {
     console.log("Klarna SDK has finished loading.");
-    Klarna.Lia.init({
-      container: "#klarna-payments-container"
-    });
-    console.log("Klarna.Lia.init called");
+    try {
+      Klarna.Lia.init({
+        container: "#klarna-payments-container"
+      });
+      console.log("Klarna.Lia.init called successfully");
+    } catch (error) {
+      console.error("Error initializing Klarna Lia:", error);
+    }
   } else {
     console.error("Klarna.Lia not available in klarnaAsyncCallback");
   }
@@ -89,8 +93,33 @@ function loadKlarnaWidget() {
     ],
   };
 
-  Klarna.Lia.load(klarnaRequest, function (res) {
-    console.log("Klarna widget loaded", res);
-  });
+  try {
+    Klarna.Lia.load(klarnaRequest, function (res) {
+      console.log("Klarna widget loaded", res);
+    });
+  } catch (error) {
+    console.error("Error loading Klarna widget:", error);
+  }
 }
+
+// Add this function to check if the Klarna SDK has loaded
+function checkKlarnaSDKLoaded() {
+  console.log("Checking if Klarna SDK is loaded");
+  if (window.Klarna && window.Klarna.Lia) {
+    console.log("Klarna SDK is loaded");
+    klarnaAsyncCallback();
+  } else {
+    console.log("Klarna SDK not loaded yet, retrying in 500ms");
+    setTimeout(checkKlarnaSDKLoaded, 500);
+  }
+}
+
+// Call this function when the DOM is ready
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("DOM content loaded");
+  // ... (keep the existing code)
+
+  // Add this line to start checking for Klarna SDK
+  checkKlarnaSDKLoaded();
+});
 
