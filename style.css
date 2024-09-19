@@ -217,29 +217,42 @@ button:hover {
 }
 
 .console-output {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: #000;
+    border: 1px solid #00ff00;
+    border-radius: 5px;
     color: #00ff00;
-    font-family: monospace;
-    font-size: 14px;
-    padding: 10px;
-    max-height: 200px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    height: 300px;
+    margin-top: 20px;
     overflow-y: auto;
+    padding: 10px;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
     z-index: 1000;
+}
+
+.console-output h3 {
+    color: #00ff00;
+    font-size: 14px;
+    margin-top: 0;
 }
 
 #console-log {
     margin: 0;
-    padding: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
-#console-log .error {
-    color: #ff4444;
+#console-log::after {
+    content: "_";
+    animation: blink 0.7s infinite;
 }
 
-#console-log .warn {
-    color: #ffbb33;
+@keyframes blink {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
 }
