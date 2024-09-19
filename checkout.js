@@ -100,7 +100,7 @@ function loadKlarnaWidget() {
         tax_rate: 0,
         total_amount: 29900,
         total_tax_amount: 0,
-        reference: "11d609c0-0609-4b3b-a472-40175828ebe1",
+        reference: "11d609c0-0609-4b3b-a472-40175828ebe1"
       },
       {
         type: "physical",
@@ -110,9 +110,9 @@ function loadKlarnaWidget() {
         tax_rate: 0,
         total_amount: 9000,
         total_tax_amount: 0,
-        reference: "11d609c0-0609-4b3b-a472-40175828ebe2",
-      },
-    ],
+        reference: "11d609c0-0609-4b3b-a472-40175828ebe2"
+      }
+    ]
   };
 
   try {
