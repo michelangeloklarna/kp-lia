@@ -94,27 +94,3 @@ function loadKlarnaWidget() {
   });
 }
 
-function authorizeKlarnaPayment() {
-  console.log("authorizeKlarnaPayment called");
-  if (!window.Klarna || !window.Klarna.Lia) {
-    console.error("Klarna.Lia not available in authorizeKlarnaPayment");
-    return;
-  }
-
-  Klarna.Lia.authorize({}, function (res) {
-    console.log("Klarna payment authorization response:", res);
-    if (res.approved) {
-      console.log("Payment approved. Authorization token:", res.authorization_token);
-    } else {
-      console.log("Payment not approved:", res.error);
-    }
-  });
-}
-
-document.getElementById("place-order-button").addEventListener("click", function (event) {
-  console.log("Place order button clicked");
-  event.preventDefault();
-  authorizeKlarnaPayment();
-});
-
-console.log("Script ended");
