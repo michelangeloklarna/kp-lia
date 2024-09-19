@@ -50,6 +50,12 @@ window.klarnaAsyncCallback = function () {
   console.log("klarnaAsyncCallback called");
   if (window.Klarna && window.Klarna.Lia) {
     console.log("Klarna SDK has finished loading.");
+    const container = document.getElementById("klarna-payments-container");
+    if (container) {
+      console.log("Klarna container found:", container);
+    } else {
+      console.error("Klarna container not found");
+    }
     try {
       Klarna.Lia.api().init({
         container: "#klarna-payments-container"
@@ -67,6 +73,16 @@ function loadKlarnaWidget() {
   console.log("loadKlarnaWidget called");
   if (!window.Klarna || !window.Klarna.Lia) {
     console.error("Klarna.Lia not available in loadKlarnaWidget");
+    return;
+  }
+
+  const container = document.getElementById("klarna-payments-container");
+  if (container) {
+    console.log("Klarna container found for loading:", container);
+    // Ensure the container is visible
+    container.style.display = "block";
+  } else {
+    console.error("Klarna container not found for loading");
     return;
   }
 
