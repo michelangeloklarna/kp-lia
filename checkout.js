@@ -11,7 +11,7 @@ function logToConsole(message, object = null) {
     console.log(logEntry);
   }
   
-  logEntries.unshift(logEntry); // Add new entry to the beginning of the array
+  logEntries.unshift(logEntry);
   
   const consoleLog = document.getElementById('console-log');
   if (consoleLog) {
@@ -62,22 +62,24 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 window.klarnaAsyncCallback = function () {
-  logToConsole("klarnaAsyncCallback called");
+  logToConsole("Klarna.Lia.api().klarnaAsyncCallback called");
   if (window.Klarna && window.Klarna.Lia) {
-    logToConsole("Klarna SDK has finished loading.");
+    logToConsole("Klarna.Lia SDK has finished loading");
     const container = document.getElementById("klarna-payments-container");
     if (container) {
-      logToConsole("Klarna container found: " + container.id);
+      logToConsole("Klarna.Lia container found: " + container.id);
     } else {
-      logToConsole("Klarna container not found");
+      logToConsole("Klarna.Lia container not found");
     }
     try {
-      Klarna.Lia.api().init({
+      const initOptions = {
         container: "#klarna-payments-container"
-      });
-      logToConsole("Klarna.Lia.api().init called successfully");
+      };
+      logToConsole("Klarna.Lia.api().init called with options:", initOptions);
+      Klarna.Lia.api().init(initOptions);
+      logToConsole("Klarna.Lia.api().init completed successfully");
     } catch (error) {
-      logToConsole("Error initializing Klarna Lia: " + error.message);
+      logToConsole("Klarna.Lia.api().init error: " + error.message);
     }
   } else {
     logToConsole("Klarna.Lia not available in klarnaAsyncCallback");
@@ -85,13 +87,13 @@ window.klarnaAsyncCallback = function () {
 };
 
 function loadKlarnaWidget() {
-  logToConsole("loadKlarnaWidget called");
+  logToConsole("Klarna.Lia.api().load called");
   if (!window.Klarna || !window.Klarna.Lia) {
-    logToConsole("Klarna.Lia not available in loadKlarnaWidget");
+    logToConsole("Klarna.Lia not available for Klarna.Lia.api().load");
     return;
   }
 
-  const klarnaRequest = {
+  const UpdateObject = {
     locale: "en-GB",
     purchase_country: "GB",
     purchase_currency: "GBP",
@@ -121,22 +123,29 @@ function loadKlarnaWidget() {
     ]
   };
 
-  logToConsole("Klarna request object:", klarnaRequest);
+  const loadOptions = {
+    container: "#klarna-payments-container"
+  };
+
+  const fullKlarnaRequest = {
+    loadOptions: loadOptions,
+    UpdateObject: UpdateObject
+  };
+
+  logToConsole("Klarna.Lia.api().load full request:", fullKlarnaRequest);
 
   try {
-    Klarna.Lia.api().load({
-      container: "#klarna-payments-container"
-    }, klarnaRequest, function (res) {
-      logToConsole("Klarna widget loaded:", res);
+    Klarna.Lia.api().load(loadOptions, UpdateObject, function (res) {
+      logToConsole("Klarna.Lia.api().load response:", res);
     });
   } catch (error) {
-    logToConsole("Error loading Klarna widget:", error);
+    logToConsole("Klarna.Lia.api().load error: " + error.message);
   }
 }
 
 function checkKlarnaSDKLoaded() {
   if (window.Klarna && window.Klarna.Lia) {
-    logToConsole("Klarna SDK is loaded");
+    logToConsole("Klarna.Lia SDK loaded");
     klarnaAsyncCallback();
   } else {
     setTimeout(checkKlarnaSDKLoaded, 500);
