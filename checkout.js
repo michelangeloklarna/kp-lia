@@ -1,7 +1,16 @@
-console.log("Script started");
+function logToConsole(message) {
+  console.log(message);  // Keep the original console.log
+  const consoleLog = document.getElementById('console-log');
+  if (consoleLog) {
+    consoleLog.innerHTML += message + '\n';
+  }
+}
+
+// Replace all console.log calls with logToConsole
+logToConsole("Script started");
 
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("DOM content loaded");
+  logToConsole("DOM content loaded");
 
   const shippingAddressSection = document.getElementById("shipping-address-section");
   const klarnaOption = document.getElementById("klarna-option");
@@ -9,18 +18,18 @@ document.addEventListener("DOMContentLoaded", function () {
   const cardPayment = document.getElementById("card-payment");
 
   if (!shippingAddressSection || !klarnaOption || !klarnaPayment || !cardPayment) {
-    console.error("One or more elements not found");
+    logToConsole("One or more elements not found");
     return;
   }
 
-  console.log("All elements found");
+  logToConsole("All elements found");
 
   // Hide shipping address section by default
   shippingAddressSection.style.display = "none";
 
   // Add event listener for payment method selection
   klarnaOption.addEventListener("change", function () {
-    console.log("Klarna option changed");
+    logToConsole("Klarna option changed");
     if (this.checked) {
       klarnaPayment.style.display = "block";
       cardPayment.style.display = "none";
@@ -29,42 +38,45 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   document.getElementById("card-option").addEventListener("change", function () {
-    console.log("Card option changed");
+    logToConsole("Card option changed");
     if (this.checked) {
       klarnaPayment.style.display = "none";
       cardPayment.style.display = "block";
     }
   });
+
+  // Add this line to start checking for Klarna SDK
+  checkKlarnaSDKLoaded();
 });
 
 // Define the global klarnaAsyncCallback function
 window.klarnaAsyncCallback = function () {
-  console.log("klarnaAsyncCallback called");
+  logToConsole("klarnaAsyncCallback called");
   if (window.Klarna && window.Klarna.Lia) {
-    console.log("Klarna SDK has finished loading.");
+    logToConsole("Klarna SDK has finished loading.");
     const container = document.getElementById("klarna-payments-container");
     if (container) {
-      console.log("Klarna container found:", container);
+      logToConsole("Klarna container found: " + container.id);
     } else {
-      console.error("Klarna container not found");
+      logToConsole("Klarna container not found");
     }
     try {
       Klarna.Lia.api().init({
         container: "#klarna-payments-container"
       });
-      console.log("Klarna.Lia.api().init called successfully");
+      logToConsole("Klarna.Lia.api().init called successfully");
     } catch (error) {
-      console.error("Error initializing Klarna Lia:", error);
+      logToConsole("Error initializing Klarna Lia: " + error.message);
     }
   } else {
-    console.error("Klarna.Lia not available in klarnaAsyncCallback");
+    logToConsole("Klarna.Lia not available in klarnaAsyncCallback");
   }
 };
 
 function loadKlarnaWidget() {
-  console.log("loadKlarnaWidget called");
+  logToConsole("loadKlarnaWidget called");
   if (!window.Klarna || !window.Klarna.Lia) {
-    console.error("Klarna.Lia not available in loadKlarnaWidget");
+    logToConsole("Klarna.Lia not available in loadKlarnaWidget");
     return;
   }
 
@@ -102,28 +114,39 @@ function loadKlarnaWidget() {
     Klarna.Lia.api().load({
       container: "#klarna-payments-container"
     }, klarnaRequest, function (res) {
-      console.log("Klarna widget loaded", res);
+      logToConsole("Klarna widget loaded", res);
     });
   } catch (error) {
-    console.error("Error loading Klarna widget:", error);
+    logToConsole("Error loading Klarna widget:", error);
   }
 }
 
+// Add this function to handle errors
+function logError(message) {
+  console.error(message);  // Keep the original console.error
+  const consoleLog = document.getElementById('console-log');
+  if (consoleLog) {
+    consoleLog.innerHTML += 'ERROR: ' + message + '\n';
+  }
+}
+
+// Replace all console.error calls with logError
+
 // Add this function to check if the Klarna SDK has loaded
 function checkKlarnaSDKLoaded() {
-  console.log("Checking if Klarna SDK is loaded");
+  logToConsole("Checking if Klarna SDK is loaded");
   if (window.Klarna && window.Klarna.Lia) {
-    console.log("Klarna SDK is loaded");
+    logToConsole("Klarna SDK is loaded");
     klarnaAsyncCallback();
   } else {
-    console.log("Klarna SDK not loaded yet, retrying in 500ms");
+    logToConsole("Klarna SDK not loaded yet, retrying in 500ms");
     setTimeout(checkKlarnaSDKLoaded, 500);
   }
 }
 
 // Call this function when the DOM is ready
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("DOM content loaded");
+  logToConsole("DOM content loaded");
   // ... (keep the existing code)
 
   // Add this line to start checking for Klarna SDK
