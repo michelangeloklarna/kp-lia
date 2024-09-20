@@ -221,18 +221,6 @@ function authorizeKlarnaPayment() {
   try {
     Klarna.Lia.api().authorize(orderData, function(vcn) {
       logToConsole("Klarna.Lia.api().authorize callback received. Full response:", vcn);
-      
-      if (vcn.approved) {
-        logToConsole("Payment authorized successfully. Approval details:", {
-          approved: vcn.approved,
-          vcn_details: vcn.vcn_details,
-          fraud_status: vcn.fraud_status
-        });
-        // Handle successful authorization (e.g., redirect to confirmation page)
-      } else {
-        logToConsole("Payment authorization failed. Reason:", vcn.reason);
-        // Handle failed authorization (e.g., show error message to user)
-      }
     });
     logToConsole("Klarna.Lia.api().authorize call completed");
   } catch (error) {
