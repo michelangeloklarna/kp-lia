@@ -57,6 +57,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  const placeOrderBtn = document.getElementById("place-order-btn");
+  placeOrderBtn.addEventListener("click", function(event) {
+    event.preventDefault();
+    authorizeKlarnaPayment();
+  });
+
   // Start checking for Klarna SDK
   checkKlarnaSDKLoaded();
 });
@@ -150,5 +156,72 @@ function checkKlarnaSDKLoaded() {
   } else {
     setTimeout(checkKlarnaSDKLoaded, 500);
   }
+}
+
+function authorizeKlarnaPayment() {
+  logToConsole("Authorizing Klarna payment");
+
+  const orderData = {
+    locale: "en-GB",
+    purchase_country: "GB",
+    purchase_currency: "GBP",
+    order_amount: 38900,
+    merchant_reference1: "11d609c0-0609-4b3b-a472-40175828ebe2",
+    merchant_reference2: "11d609c0-0609-4b3b-a472-40175828ebe2",
+    order_lines: [
+      {
+        name: "LG 43UR78006LK 2023",
+        image_url: "https://johnlewis.scene7.com/is/image/JohnLewis/110217231?wid=640&hei=853",
+        product_url: "https://www.johnlewis.com/lg-43ur78006lk-2023-led-hdr-4k-ultra-hd-smart-tv-43-inch-with-freeview-play-freesat-hd-dark-iron-grey/p110258583",
+        quantity: 1,
+        total_amount: 29900,
+        unit_price: 29900
+      },
+      {
+        name: "adidas Supernova Stride Men's Sports Trainers",
+        image_url: "https://johnlewis.scene7.com/is/image/JohnLewis/006884883alt1?$rsp-pdp-port-640$",
+        product_url: "https://www.johnlewis.com/adidas-supernova-stride-mens-sports-trainers/p111295105",
+        quantity: 1,
+        total_amount: 9000,
+        unit_price: 9000
+      }
+    ],
+    billing_address: {
+      email: "john.doe@example.com",
+      given_name: "John",
+      family_name: "Doe",
+      phone: "+447700900123",
+      country: "GB",
+      street_address: "221B Baker Street",
+      postal_code: "NW1 6XE",
+      region: "Greater London",
+      city: "London"
+    },
+    shipping_address: {
+      email: "jane.smith@example.com",
+      given_name: "Jane",
+      family_name: "Smith",
+      phone: "+447700900456",
+      country: "GB",
+      street_address: "10 Downing Street",
+      postal_code: "SW1A 2AA",
+      region: "Greater London",
+      city: "London"
+    }
+  };
+
+  logToConsole("Klarna.Lia.api().authorize called with order data:", orderData);
+
+  Klarna.Lia.api().authorize(orderData, function(vcn) {
+    logToConsole("Klarna.Lia.api().authorize callback received:", vcn);
+    
+    if (vcn.approved) {
+      logToConsole("Payment authorized successfully");
+      // Handle successful authorization (e.g., redirect to confirmation page)
+    } else {
+      logToConsole("Payment authorization failed");
+      // Handle failed authorization (e.g., show error message to user)
+    }
+  });
 }
 
