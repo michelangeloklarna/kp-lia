@@ -6,7 +6,11 @@ function logToConsole(message, object = null) {
   
   if (object) {
     console.log(logEntry, object);
-    logEntry += '\n' + JSON.stringify(object, null, 2);
+    try {
+      logEntry += '\n' + JSON.stringify(object, null, 2);
+    } catch (error) {
+      logEntry += '\n[Object could not be stringified]';
+    }
   } else {
     console.log(logEntry);
   }
@@ -15,7 +19,7 @@ function logToConsole(message, object = null) {
   
   const consoleLog = document.getElementById('console-log');
   if (consoleLog) {
-    consoleLog.innerHTML = logEntries.join('\n');
+    consoleLog.innerHTML = logEntries.join('\n').replace(/\n/g, '<br>');
   }
 }
 
