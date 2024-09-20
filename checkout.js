@@ -58,10 +58,16 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   const placeOrderBtn = document.getElementById("place-order-btn");
-  placeOrderBtn.addEventListener("click", function(event) {
-    event.preventDefault();
-    authorizeKlarnaPayment();
-  });
+  if (placeOrderBtn) {
+    placeOrderBtn.addEventListener("click", function(event) {
+      event.preventDefault();
+      logToConsole("Place order button clicked");
+      authorizeKlarnaPayment();
+    });
+    logToConsole("Place order button event listener added");
+  } else {
+    logToConsole("Error: Place order button not found");
+  }
 
   // Start checking for Klarna SDK
   checkKlarnaSDKLoaded();
