@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Order Confirmation</div>
+    </header>
+    <div class="main-content">
+        <div class="confirmation-area">
+            <h1>Thank you for your order!</h1>
+            <p>Your order has been placed successfully. Here are your order details:</p>
+            <div id="order-details"></div>
+            <button onclick="window.location.href='index.html'">Back to Home</button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const orderDetails = document.getElementById('order-details');
+            const klarnaResponse = JSON.parse(sessionStorage.getItem('klarnaResponse'));
+
+            if (klarnaResponse) {
+                const { order_id, vcn, order_data } = klarnaResponse;
+                const { billing_address, shipping_address, order_amount } = order_data;
+
+                orderDetails.innerHTML = `
+                    <h2>Order ID: ${order_id}</h2>
+                    <h3>Virtual Card Number (VCN):</h3>
+                    <p>Amount: ${vcn.amount}</p>
+                    <p>PAN: ${vcn.pan}</p>
+                    <p>Expiry Date: ${vcn.expiry_date}</p>
+                    <p>CVV: ${vcn.cvv}</p>
+                    <h3>Billing Address:</h3>
+                    <p>${billing_address.given_name} ${billing_address.family_name}</p>
+                    <p>${billing_address.street_address}</p>
+                    <p>${billing_address.city}, ${billing_address.postal_code}</p>
+                    <p>${billing_address.country}</p>
+                    <p>Email: ${billing_address.email}</p>
+                    <p>Phone: ${billing_address.phone}</p>
+                    <h3>Shipping Address:</h3>
+                    <p>${shipping_address.given_name} ${shipping_address.family_name}</p>
+                    <p>${shipping_address.street_address}</p>
+                    <p>${shipping_address.city}, ${shipping_address.postal_code}</p>
+                    <p>${shipping_address.country}</p>
+                    <p>Email: ${shipping_address.email}</p>
+                    <p>Phone: ${shipping_address.phone}</p>
+                    <h3>Order Amount:</h3>
+                    <p>${order_amount}</p>
+                `;
+            } else {
+                orderDetails.innerHTML = '<p>No order details found.</p>';
+            }
+        });
+    </script>
+</body>
+</html>
