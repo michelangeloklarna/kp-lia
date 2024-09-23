@@ -9,12 +9,14 @@ This project demonstrates the integration of Klarna's Lightweight Integration Ap
 - Integration with Klarna LIA SDK
 - Dynamic cart summary display
 - Real-time console output with timestamps for debugging and monitoring
+- Order confirmation page displaying order details
 
 ## Project Structure
 
 - `index.html`: The main HTML file containing the checkout page structure
 - `style.css`: CSS file for styling the checkout page
 - `checkout.js`: JavaScript file handling form interactions, Klarna LIA integration, and console logging
+- `order-confirmation.html`: HTML file displaying the order confirmation details
 
 ## Setup and Usage
 
@@ -32,6 +34,16 @@ This project uses Klarna's LIA SDK for processing Klarna payments. Key integrati
    ```
 2. The `klarnaAsyncCallback` function in `checkout.js` initializes the Klarna LIA SDK
 3. The `loadKlarnaWidget` function in `checkout.js` loads the Klarna payment options
+
+## Order Confirmation Page
+
+After a successful payment authorization, the user is redirected to the order confirmation page (`order-confirmation.html`). This page displays the following details:
+
+- Order ID
+- Virtual Card Number (VCN) details
+- Billing address
+- Shipping address
+- Order amount
 
 ## Console Output
 
