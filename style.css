@@ -249,6 +249,10 @@ button:hover, .button:hover {
     display: flex;
     flex-direction: column;
     height: 100%; /* Ensure full height */
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
 }
 
 .console-output {
