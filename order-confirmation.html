@@ -11,13 +11,36 @@
         <div class="logo">Order Confirmation</div>
     </header>
     <div class="main-content">
-        <div class="confirmation-area" style="flex: 2;">
+        <div class="confirmation-area">
             <h1>Thank you for your order!</h1>
             <p>Your order has been placed successfully. Here are your order details:</p>
-            <div id="order-details"></div>
+            <div id="order-details">
+                <div class="order-box">
+                    <h3>Order ID: <span id="order-id"></span></h3>
+                </div>
+                <div class="order-box">
+                    <h3>Virtual Card Number (VCN):</h3>
+                    <p>Amount: <span id="vcn-amount"></span></p>
+                    <p>PAN: <span id="vcn-pan"></span></p>
+                    <p>Expiry Date: <span id="vcn-expiry-date"></span></p>
+                    <p>CVV: <span id="vcn-cvv"></span></p>
+                </div>
+                <div class="order-box">
+                    <h3>Billing Address:</h3>
+                    <p id="billing-address"></p>
+                </div>
+                <div class="order-box">
+                    <h3>Shipping Address:</h3>
+                    <p id="shipping-address"></p>
+                </div>
+                <div class="order-box">
+                    <h3>Order Amount:</h3>
+                    <p id="order-amount"></p>
+                </div>
+            </div>
             <button class="button" onclick="window.location.href='index.html'">Restart</button>
         </div>
-        <div class="console-container" style="flex: 3;">
+        <div class="console-container">
             <div class="console-output">
                 <h3>Console Output</h3>
                 <pre id="console-log"></pre>
@@ -33,30 +56,31 @@
                 const { order_id, vcn, order_data } = klarnaResponse;
                 const { billing_address, shipping_address, order_amount } = order_data;
 
-                orderDetails.innerHTML = `
-                    <h2>Order ID: ${order_id}</h2>
-                    <h3>Virtual Card Number (VCN):</h3>
-                    <p>Amount: ${vcn.amount}</p>
-                    <p>PAN: ${vcn.pan}</p>
-                    <p>Expiry Date: ${vcn.expiry_date}</p>
-                    <p>CVV: ${vcn.cvv}</p>
-                    <h3>Billing Address:</h3>
-                    <p>${billing_address.given_name} ${billing_address.family_name}</p>
-                    <p>${billing_address.street_address}</p>
-                    <p>${billing_address.city}, ${billing_address.postal_code}</p>
-                    <p>${billing_address.country}</p>
-                    <p>Email: ${billing_address.email}</p>
-                    <p>Phone: ${billing_address.phone}</p>
-                    <h3>Shipping Address:</h3>
-                    <p>${shipping_address.given_name} ${shipping_address.family_name}</p>
-                    <p>${shipping_address.street_address}</p>
-                    <p>${shipping_address.city}, ${shipping_address.postal_code}</p>
-                    <p>${shipping_address.country}</p>
-                    <p>Email: ${shipping_address.email}</p>
-                    <p>Phone: ${shipping_address.phone}</p>
-                    <h3>Order Amount:</h3>
-                    <p>${order_amount}</p>
+                document.getElementById('order-id').textContent = order_id;
+                document.getElementById('vcn-amount').textContent = vcn.amount;
+                document.getElementById('vcn-pan').textContent = vcn.pan;
+                document.getElementById('vcn-expiry-date').textContent = vcn.expiry_date;
+                document.getElementById('vcn-cvv').textContent = vcn.cvv;
+
+                document.getElementById('billing-address').innerHTML = `
+                    ${billing_address.given_name} ${billing_address.family_name}<br>
+                    ${billing_address.street_address}<br>
+                    ${billing_address.city}, ${billing_address.postal_code}<br>
+                    ${billing_address.country}<br>
+                    Email: ${billing_address.email}<br>
+                    Phone: ${billing_address.phone}
                 `;
+
+                document.getElementById('shipping-address').innerHTML = `
+                    ${shipping_address.given_name} ${shipping_address.family_name}<br>
+                    ${shipping_address.street_address}<br>
+                    ${shipping_address.city}, ${shipping_address.postal_code}<br>
+                    ${shipping_address.country}<br>
+                    Email: ${shipping_address.email}<br>
+                    Phone: ${shipping_address.phone}
+                `;
+
+                document.getElementById('order-amount').textContent = order_amount;
             } else {
                 orderDetails.innerHTML = '<p>No order details found.</p>';
             }
