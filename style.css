@@ -170,7 +170,7 @@ input[type="radio"] {
     width: calc(50% - 5px);
 }
 
-button {
+button, .button {
     background: linear-gradient(to bottom, #f7dfa5, #f0c14b);
     border-color: #a88734 #9c7e31 #846a29;
     color: #111;
@@ -184,9 +184,10 @@ button {
     width: 100%;
     box-shadow: 0 1px 0 rgba(255,255,255,.4) inset;
     margin-top: 20px;
+    font-family: 'Amazon Ember', Arial, sans-serif;
 }
 
-button:hover {
+button:hover, .button:hover {
     background: linear-gradient(to bottom, #f5d78e, #eeb933);
 }
 
