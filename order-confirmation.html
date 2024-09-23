@@ -20,9 +20,9 @@
         }
         .main-content {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: 100vh;
+            padding: 20px;
         }
         .confirmation-area {
             background-color: white;
@@ -31,6 +31,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             max-width: 600px;
             width: 100%;
+            margin-bottom: 20px;
         }
         .confirmation-area h1 {
             color: #27ae60;
@@ -62,6 +63,23 @@
         button:hover {
             background-color: #e67e22;
         }
+        .console-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+        .console-output {
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+        }
     </style>
 </head>
 <body>
@@ -73,7 +91,13 @@
             <h1>Thank you for your order!</h1>
             <p>Your order has been placed successfully. Here are your order details:</p>
             <div id="order-details"></div>
-            <button onclick="window.location.href='index.html'">Back to Home</button>
+            <button onclick="window.location.href='index.html'">Restart</button>
+        </div>
+        <div class="console-container">
+            <div class="console-output">
+                <h3>Console Output</h3>
+                <pre id="console-log"></pre>
+            </div>
         </div>
     </div>
     <script>
@@ -112,6 +136,11 @@
             } else {
                 orderDetails.innerHTML = '<p>No order details found.</p>';
             }
+
+            // Display console log entries
+            const consoleLog = document.getElementById('console-log');
+            const logEntries = JSON.parse(sessionStorage.getItem('logEntries')) || [];
+            consoleLog.innerHTML = logEntries.join('\n').replace(/\n/g, '<br>');
         });
     </script>
 </body>

@@ -6,6 +6,53 @@
     <title>Checkout</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.cs.playground.klarna.com/lia/sdk/lia-sdk_eu.js" async></script>
+    <style>
+        .cart-summary {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        .cart-item {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        .cart-item-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-right: 20px;
+        }
+        .cart-item-details {
+            flex: 1;
+        }
+        .cart-item-details a {
+            font-size: 16px;
+            color: #007185;
+            text-decoration: none;
+        }
+        .cart-item-details a:hover {
+            text-decoration: underline;
+        }
+        .cart-item-details p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+        }
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -113,6 +160,51 @@
     function handleKlarnaScriptError() {
         console.error("Failed to load Klarna SDK script");
     }
+
+    // Hardcoded cart items
+    const cartItems = [
+        {
+            name: "LG 43UR78006LK 2023",
+            image_url: "https://www.lg.com/content/dam/channel/wcms/uk/2024-promotions/euro-screenfills/uhd/ur78/65/original/450x450_studio_resized.jpg",
+            product_url: "https://www.lg.com/uk/tvs-soundbars/smart-tvs/43ur78006lk/?srsltid=AfmBOopSsq31bnONf81xbWMxmUg_l8v0caUDy9PHd-RBAnB3htifREPa",
+            quantity: 1,
+            unit_price: 29900,
+            total_amount: 29900
+        },
+        {
+            name: "adidas Supernova Stride Men's Sports Trainers",
+            image_url: "https://johnlewis.scene7.com/is/image/JohnLewis/006884883alt1?$rsp-pdp-port-640$",
+            product_url: "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/50caa37b0b204101abe679004a7eddba_9366/Supernova_Stride_Running_Shoes_Black_IG8321_HM1.jpg",
+            quantity: 1,
+            unit_price: 9000,
+            total_amount: 9000
+        }
+    ];
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const cartItemsContainer = document.querySelector('.cart-items');
+        const cartTotalAmount = document.getElementById('cart-total-amount');
+
+        let totalAmount = 0;
+
+        cartItems.forEach(item => {
+            const itemElement = document.createElement('div');
+            itemElement.classList.add('cart-item');
+            itemElement.innerHTML = `
+                <img src="${item.image_url}" alt="${item.name}" class="cart-item-image">
+                <div class="cart-item-details">
+                    <a href="${item.product_url}" target="_blank">${item.name}</a>
+                    <p>Quantity: ${item.quantity}</p>
+                    <p>Price: £${(item.unit_price / 100).toFixed(2)}</p>
+                    <p>Total: £${(item.total_amount / 100).toFixed(2)}</p>
+                </div>
+            `;
+            cartItemsContainer.appendChild(itemElement);
+            totalAmount += item.total_amount;
+        });
+
+        cartTotalAmount.textContent = `£${(totalAmount / 100).toFixed(2)}`;
+    });
     </script>
 </body>
 </html>

@@ -17,6 +17,9 @@ function logToConsole(message, object = null) {
   
   logEntries.unshift(logEntry);
   
+  // Store log entries in sessionStorage
+  sessionStorage.setItem('logEntries', JSON.stringify(logEntries));
+  
   const consoleLog = document.getElementById('console-log');
   if (consoleLog) {
     consoleLog.innerHTML = logEntries.join('\n').replace(/\n/g, '<br>');
@@ -114,26 +117,25 @@ function loadKlarnaWidget() {
     purchase_country: "GB",
     purchase_currency: "GBP",
     order_amount: 38900,
-    order_tax_amount: 0,
     order_lines: [
       {
         type: "physical",
         name: "LG 43UR78006LK 2023",
+        image_url: "https://www.lg.com/content/dam/channel/wcms/uk/2024-promotions/euro-screenfills/uhd/ur78/65/original/450x450_studio_resized.jpg",
+        product_url: "https://www.lg.com/uk/tvs-soundbars/smart-tvs/43ur78006lk/?srsltid=AfmBOopSsq31bnONf81xbWMxmUg_l8v0caUDy9PHd-RBAnB3htifREPa",
         quantity: 1,
         unit_price: 29900,
-        tax_rate: 0,
         total_amount: 29900,
-        total_tax_amount: 0,
         reference: "11d609c0-0609-4b3b-a472-40175828ebe1"
       },
       {
         type: "physical",
         name: "adidas Supernova Stride Men's Sports Trainers",
+        image_url: "https://johnlewis.scene7.com/is/image/JohnLewis/006884883alt1?$rsp-pdp-port-640$",
+        product_url: "https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/50caa37b0b204101abe679004a7eddba_9366/Supernova_Stride_Running_Shoes_Black_IG8321_HM1.jpg",
         quantity: 1,
         unit_price: 9000,
-        tax_rate: 0,
         total_amount: 9000,
-        total_tax_amount: 0,
         reference: "11d609c0-0609-4b3b-a472-40175828ebe2"
       }
     ]
