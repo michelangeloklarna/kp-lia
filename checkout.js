@@ -223,8 +223,20 @@ function authorizeKlarnaPayment() {
   logToConsole("Klarna.Lia.api().authorize about to be called with order data:", orderData);
 
   try {
-    Klarna.Lia.api().authorize(orderData, function(vcn) {
-      logToConsole("Klarna.Lia.api().authorize callback received. Full response:", vcn);
+    Klarna.Lia.api().authorize(orderData, function(response) {
+      logToConsole("Klarna.Lia.api().authorize callback received. Full response:", response);
+
+      if (response.approved && !response.show_form) {
+        logToConsole("Payment approved, redirecting to confirmation page");
+
+        // Store the response in sessionStorage to pass it to the confirmation page
+        sessionStorage.setItem('klarnaResponse', JSON.stringify(response));
+
+        // Redirect to the order confirmation page
+        window.location.href = 'order-confirmation.html';
+      } else {
+        logToConsole("Payment not approved or additional form required");
+      }
     });
     logToConsole("Klarna.Lia.api().authorize call completed");
   } catch (error) {
